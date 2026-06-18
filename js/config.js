@@ -35,9 +35,9 @@ export const BEBE = {
 export const CAMPOS = [
   { key: "fecha",    label: "Fecha de nacimiento",        emoji: "📅", tipo: "date" },
   { key: "hora",     label: "Hora de nacimiento",         emoji: "⏰", tipo: "time" },
-  { key: "peso",     label: "Peso (en gramos)",           emoji: "⚖️", tipo: "number", min: 1000, max: 6000, step: 10,  placeholder: "Ej: 3250" },
-  { key: "talla",    label: "Talla (en cm)",              emoji: "📏", tipo: "number", min: 30,   max: 60,   step: 0.5, placeholder: "Ej: 49" },
-  { key: "ojos",     label: "Color de ojos",              emoji: "👀", tipo: "select", opciones: ["Marrones", "Claros (celestes/verdes)", "Negros"] },
+  { key: "peso",     label: "Peso (en gramos)",           emoji: "⚖️", tipo: "number", step: "any",  placeholder: "Ej: 3250" },
+  { key: "talla",    label: "Talla (en cm)",              emoji: "📏", tipo: "number", step: "any", placeholder: "Ej: 49" },
+  { key: "ojos",     label: "Color de ojos",              emoji: "👀", tipo: "select", opciones: ["Marrones", "Negros", "Celestes", "Verdes", "Miel / Avellana", "Grises"] },
   { key: "pelo",     label: "Cantidad de pelo",           emoji: "🧒", tipo: "select", opciones: ["Mucho", "Normal", "Poquito"] },
   { key: "parecido", label: "¿A quién se va a parecer?",   emoji: "🧬", tipo: "select", opciones: ["A mamá", "A papá", "Una mezcla"] },
   { key: "mensaje",  label: "Un mensaje o deseo para Sofía", emoji: "💌", tipo: "textarea", opcional: true, sinPuntaje: true, placeholder: "¡Bienvenida al mundo!" },

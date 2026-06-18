@@ -89,12 +89,30 @@ function pintarFormulario() {
   $("#nombre").value = yo.nombre;
 }
 
+// Verificación anti-robot simple: una sumita al azar
+let captchaResultado = 0;
+function nuevoCaptcha() {
+  const a = 1 + Math.floor(Math.random() * 9);
+  const b = 1 + Math.floor(Math.random() * 9);
+  captchaResultado = a + b;
+  $("#captcha-pregunta").textContent = `¿Cuánto es ${a} + ${b}?`;
+  const inp = $("#captcha-respuesta");
+  if (inp) inp.value = "";
+}
+
 async function enviarPrediccion(e) {
   e.preventDefault();
   const form = e.target;
   const btn = $("#btn-enviar");
   const datos = { nombre: $("#nombre").value.trim() };
   if (!datos.nombre) return;
+
+  // Chequeo anti-robot
+  if (parseInt($("#captcha-respuesta").value, 10) !== captchaResultado) {
+    alert("La verificación no coincide 🤔\n¡Resolvé la sumita y probá de nuevo!");
+    nuevoCaptcha();
+    return;
+  }
   for (const c of CAMPOS) {
     datos[c.key] = form.elements[c.key]?.value ?? "";
   }
@@ -108,6 +126,7 @@ async function enviarPrediccion(e) {
     festejar();
     form.reset();
     $("#nombre").value = yo.nombre;
+    nuevoCaptcha();
     mostrarVista("participantes");
     $("#enviado").classList.add("visible");
     setTimeout(() => $("#enviado").classList.remove("visible"), 4000);
@@ -247,6 +266,7 @@ function compartir() {
 function init() {
   pintarTextos();
   pintarFormulario();
+  nuevoCaptcha();
   pintarParticipantes();
   pintarTabla();
 

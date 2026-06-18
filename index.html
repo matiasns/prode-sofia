@@ -40,6 +40,10 @@
             <input type="text" id="nombre" name="nombre" maxlength="40" placeholder="Ej: Tía Caro" required />
           </label>
           <div class="grid-campos" id="campos"></div>
+          <label class="campo" id="captcha-campo">
+            <span class="campo-label">🤖 Verificación: <span id="captcha-pregunta"></span></span>
+            <input type="number" id="captcha-respuesta" inputmode="numeric" placeholder="Escribí el resultado" required />
+          </label>
           <button type="submit" class="btn" id="btn-enviar">¡Enviar mi predicción! 🎉</button>
         </form>
       </div>
