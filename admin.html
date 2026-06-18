@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#ff8fab" />
+  <title>Admin · El Prode de Sofía</title>
+  <meta name="robots" content="noindex" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔐</text></svg>" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="bebe-emoji">🔐</div>
+      <h1>Panel de Admin</h1>
+      <p class="subtitulo">Cargá los datos reales cuando nazca <b id="bebe-nombre">Sofía</b></p>
+    </header>
+
+    <div class="aviso-demo" id="aviso-demo">
+      🧪 <b>Modo demo:</b> Firebase todavía no está conectado, esto guarda solo en este dispositivo.
+    </div>
+
+    <!-- Login -->
+    <div class="card admin-card" id="login">
+      <h2>Acceso privado</h2>
+      <p class="intro">Esta sección es solo para vos. Ingresá la clave.</p>
+      <form id="login-form">
+        <label class="campo">
+          <span class="campo-label">🔑 Clave de admin</span>
+          <input type="password" id="pass" placeholder="••••••••" />
+        </label>
+        <p class="error" id="error-pass"></p>
+        <button type="submit" class="btn">Entrar</button>
+      </form>
+      <a class="link-volver" href="index.html">← Volver al juego</a>
+    </div>
+
+    <!-- Panel -->
+    <div class="card admin-card" id="panel" style="display:none">
+      <div class="estado nopub" id="estado"></div>
+      <p class="intro">Participantes que ya jugaron: <b id="contador">0</b> 🎈</p>
+      <h2>Datos reales de la llegada</h2>
+      <p class="intro">Completá lo que sepas. Al guardar, se publica la tabla de posiciones para todos.</p>
+      <form id="form-resultado">
+        <div id="campos-reales"></div>
+        <button type="submit" class="btn" id="btn-guardar">💾 Guardar y publicar resultados</button>
+        <button type="button" class="btn btn-sec" id="btn-despublicar" style="display:none;margin-top:10px">🙈 Ocultar la tabla</button>
+      </form>
+      <a class="link-volver" href="index.html">← Volver al juego</a>
+    </div>
+  </div>
+
+  <div class="toast" id="aviso"></div>
+
+  <script type="module" src="js/admin.js"></script>
+</body>
+</html>

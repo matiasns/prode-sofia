@@ -1,0 +1,299 @@
+/* ============================================================
+   El Prode de Sofía — estilos
+   ============================================================ */
+@import url("https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Quicksand:wght@400;500;600;700&display=swap");
+
+:root {
+  --rosa: #ff8fab;
+  --rosa-suave: #ffd3df;
+  --lavanda: #cdb4db;
+  --menta: #b8e0d2;
+  --amarillo: #ffd166;
+  --crema: #fff7fb;
+  --texto: #5b4750;
+  --texto-suave: #9a8b92;
+  --blanco: #ffffff;
+  --sombra: 0 10px 30px rgba(214, 137, 169, 0.18);
+  --sombra-suave: 0 6px 18px rgba(214, 137, 169, 0.12);
+  --radio: 22px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: "Quicksand", system-ui, sans-serif;
+  color: var(--texto);
+  background:
+    radial-gradient(1200px 500px at 80% -10%, #fde7f1 0%, transparent 60%),
+    radial-gradient(900px 500px at 0% 0%, #eee7fb 0%, transparent 55%),
+    linear-gradient(180deg, #fff8fc 0%, #fef6ff 100%);
+  background-attachment: fixed;
+  min-height: 100vh;
+  line-height: 1.5;
+}
+
+.wrap { max-width: 760px; margin: 0 auto; padding: 22px 18px 60px; }
+
+/* ---------- Encabezado ---------- */
+header { text-align: center; padding: 14px 0 6px; }
+.bebe-emoji { font-size: 56px; line-height: 1; filter: drop-shadow(0 6px 8px rgba(214,137,169,.3)); }
+h1 {
+  font-family: "Baloo 2", cursive;
+  font-size: clamp(30px, 7vw, 46px);
+  margin: 6px 0 2px;
+  color: var(--rosa);
+  text-shadow: 0 2px 0 #fff, 0 6px 14px rgba(255,143,171,.25);
+}
+.subtitulo { margin: 0; color: var(--texto-suave); font-weight: 600; font-size: 16px; }
+.countdown {
+  margin: 14px auto 0;
+  display: inline-block;
+  background: var(--blanco);
+  border: 2px dashed var(--rosa-suave);
+  border-radius: 999px;
+  padding: 8px 18px;
+  font-size: 14px;
+  box-shadow: var(--sombra-suave);
+}
+
+/* ---------- Aviso modo demo ---------- */
+.aviso-demo {
+  display: none;
+  margin: 16px 0 0;
+  background: #fff6e5;
+  border: 1px solid #ffe1a8;
+  color: #8a6d1f;
+  border-radius: 14px;
+  padding: 10px 14px;
+  font-size: 13px;
+  text-align: center;
+}
+
+/* ---------- Tabs ---------- */
+.tabs {
+  display: flex;
+  gap: 6px;
+  background: var(--blanco);
+  padding: 6px;
+  border-radius: 999px;
+  box-shadow: var(--sombra-suave);
+  margin: 22px 0;
+  position: sticky;
+  top: 10px;
+  z-index: 5;
+}
+.tab {
+  flex: 1;
+  border: 0;
+  background: transparent;
+  color: var(--texto-suave);
+  font-family: inherit;
+  font-weight: 700;
+  font-size: 14px;
+  padding: 11px 8px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all .2s;
+}
+.tab:hover { color: var(--rosa); }
+.tab.activa {
+  background: linear-gradient(135deg, var(--rosa), var(--lavanda));
+  color: #fff;
+  box-shadow: 0 6px 14px rgba(255,143,171,.4);
+}
+
+/* ---------- Vistas ---------- */
+.vista { display: none; animation: aparecer .35s ease; }
+.vista.activa { display: block; }
+@keyframes aparecer { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+.card {
+  background: var(--blanco);
+  border-radius: var(--radio);
+  box-shadow: var(--sombra);
+  padding: 22px;
+}
+.card h2 {
+  font-family: "Baloo 2", cursive;
+  margin: 0 0 4px;
+  font-size: 22px;
+  color: var(--texto);
+}
+.card .intro { margin: 0 0 18px; color: var(--texto-suave); font-size: 14px; }
+
+/* ---------- Formulario ---------- */
+.campo { display: block; margin-bottom: 14px; }
+.campo-label { display: block; font-weight: 700; font-size: 14px; margin-bottom: 6px; }
+.campo-label em { color: var(--texto-suave); font-weight: 500; }
+input, select, textarea {
+  width: 100%;
+  font-family: inherit;
+  font-size: 16px;
+  color: var(--texto);
+  background: var(--crema);
+  border: 2px solid #f1e2ea;
+  border-radius: 14px;
+  padding: 12px 14px;
+  transition: border-color .2s, box-shadow .2s;
+}
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--rosa);
+  box-shadow: 0 0 0 4px rgba(255,143,171,.15);
+}
+textarea { resize: vertical; }
+
+.grid-campos { margin-top: 6px; }
+
+.btn {
+  display: inline-block;
+  width: 100%;
+  border: 0;
+  cursor: pointer;
+  font-family: "Baloo 2", cursive;
+  font-size: 18px;
+  color: #fff;
+  background: linear-gradient(135deg, var(--rosa), var(--lavanda));
+  border-radius: 16px;
+  padding: 14px 18px;
+  margin-top: 8px;
+  box-shadow: 0 8px 18px rgba(255,143,171,.4);
+  transition: transform .15s, box-shadow .15s, opacity .2s;
+}
+.btn:hover { transform: translateY(-2px); box-shadow: 0 12px 22px rgba(255,143,171,.5); }
+.btn:active { transform: translateY(0); }
+.btn:disabled { opacity: .6; cursor: default; transform: none; }
+.btn-sec {
+  background: var(--blanco);
+  color: var(--rosa);
+  border: 2px solid var(--rosa-suave);
+  box-shadow: var(--sombra-suave);
+  font-size: 15px;
+}
+
+/* ---------- Participantes ---------- */
+.subhead { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; flex-wrap: wrap; gap: 10px; }
+.subhead h2 { margin: 0; }
+.contador-pill {
+  background: var(--menta);
+  color: #2f6a57;
+  font-weight: 700;
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-size: 14px;
+}
+.card-part {
+  background: var(--blanco);
+  border-radius: 18px;
+  box-shadow: var(--sombra-suave);
+  padding: 16px 18px;
+  margin-bottom: 12px;
+  border-left: 6px solid var(--lavanda);
+}
+.card-part.mio { border-left-color: var(--rosa); background: #fff5f9; }
+.card-part h3 { margin: 0 0 10px; font-family: "Baloo 2", cursive; font-size: 18px; }
+.chips { display: flex; flex-wrap: wrap; gap: 7px; }
+.chip {
+  background: var(--crema);
+  border: 1px solid #f0e3ea;
+  border-radius: 999px;
+  padding: 5px 11px;
+  font-size: 13px;
+  font-weight: 600;
+}
+.chip.real { background: #eafaf3; border-color: #c6ebdd; }
+.mensaje { margin: 10px 0 0; font-style: italic; color: var(--texto-suave); font-size: 14px; }
+.vos {
+  background: var(--rosa); color: #fff; font-size: 11px; font-weight: 700;
+  border-radius: 999px; padding: 2px 8px; vertical-align: middle;
+}
+
+/* ---------- Tabla de posiciones ---------- */
+#resultado-real {
+  display: none;
+  background: linear-gradient(135deg, #fff, #fdf0f6);
+  border: 2px solid var(--rosa-suave);
+  border-radius: var(--radio);
+  padding: 18px 20px;
+  margin-bottom: 18px;
+  box-shadow: var(--sombra-suave);
+}
+#resultado-real h3 { margin: 0 0 12px; font-family: "Baloo 2", cursive; font-size: 20px; color: var(--rosa); }
+
+.fila {
+  background: var(--blanco);
+  border-radius: 16px;
+  box-shadow: var(--sombra-suave);
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+.fila summary {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  cursor: pointer;
+  list-style: none;
+}
+.fila summary::-webkit-details-marker { display: none; }
+.fila .pos { font-size: 24px; min-width: 34px; text-align: center; }
+.pos-num { font-family: "Baloo 2", cursive; font-size: 18px; color: var(--texto-suave); }
+.fila .nombre { flex: 1; font-weight: 700; font-size: 16px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.fila .puntos { font-family: "Baloo 2", cursive; font-size: 22px; color: var(--rosa); }
+.fila .puntos small { font-size: 12px; color: var(--texto-suave); font-weight: 500; }
+.fila.podio { border: 2px solid var(--amarillo); }
+.fila.podio:nth-of-type(1) { background: linear-gradient(135deg,#fffdf4,#fff6e0); }
+.fila.mio { box-shadow: 0 0 0 2px var(--rosa), var(--sombra-suave); }
+.badge {
+  background: #fff2cc; color: #9a7b16; border-radius: 999px;
+  padding: 2px 9px; font-size: 11px; font-weight: 700;
+}
+.detalle { padding: 4px 16px 14px; border-top: 1px dashed #f0e3ea; }
+.det-row {
+  display: grid; grid-template-columns: 1fr auto auto; gap: 10px;
+  padding: 7px 0; font-size: 14px; align-items: center;
+  border-bottom: 1px solid #faf2f6;
+}
+.det-row:last-child { border-bottom: 0; }
+.det-val { color: var(--texto-suave); font-weight: 600; }
+.det-pts { font-weight: 700; color: var(--menta); color: #2f9e78; min-width: 48px; text-align: right; }
+
+/* ---------- Estados vacíos ---------- */
+.vacio { text-align: center; color: var(--texto-suave); padding: 20px; }
+.vacio.grande {
+  background: var(--blanco); border-radius: var(--radio);
+  box-shadow: var(--sombra); padding: 40px 24px;
+}
+.emoji-grande { font-size: 60px; margin-bottom: 8px; }
+.vacio.grande h3 { font-family: "Baloo 2", cursive; font-size: 22px; margin: 0 0 8px; color: var(--texto); }
+.vacio.grande p { margin: 0; }
+
+/* ---------- Aviso enviado ---------- */
+.toast {
+  position: fixed; left: 50%; bottom: 24px;
+  transform: translateX(-50%) translateY(150%);
+  background: #2f9e78; color: #fff; font-weight: 700;
+  padding: 14px 22px; border-radius: 999px; box-shadow: var(--sombra);
+  transition: transform .4s cubic-bezier(.2,1.3,.4,1); z-index: 20; max-width: 90%;
+  text-align: center;
+}
+.toast.visible { transform: translateX(-50%) translateY(0); }
+
+/* ---------- Footer / compartir ---------- */
+.footer { text-align: center; margin-top: 26px; }
+footer.creditos { text-align: center; margin-top: 30px; color: var(--texto-suave); font-size: 13px; }
+footer.creditos a { color: var(--rosa); }
+
+/* ---------- Admin ---------- */
+.admin-card { max-width: 520px; margin: 0 auto; }
+.estado { border-radius: 12px; padding: 10px 14px; font-weight: 700; font-size: 14px; margin-bottom: 16px; }
+.estado.pub { background: #eafaf3; color: #2f7a5e; }
+.estado.nopub { background: #fdeef0; color: #b4566a; }
+.error { color: #d6455f; font-size: 13px; min-height: 18px; font-weight: 600; }
+.link-volver { display: inline-block; margin-top: 18px; color: var(--rosa); font-weight: 600; text-decoration: none; }
+
+@media (max-width: 480px) {
+  .fila .puntos { font-size: 18px; }
+  .card { padding: 18px; }
+}

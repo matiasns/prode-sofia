@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#ff8fab" />
+  <title>El Prode de Sofía</title>
+  <meta name="description" content="Adiviná cómo va a llegar Sofía: peso, talla, fecha y más. ¡Sumá tu predicción!" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👶</text></svg>" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="bebe-emoji">👶🎀</div>
+      <h1 id="titulo">El Prode de Sofía</h1>
+      <p class="subtitulo" id="subtitulo">Adiviná cómo va a llegar nuestra bebé</p>
+      <div class="countdown" id="countdown"></div>
+    </header>
+
+    <div class="aviso-demo" id="aviso-demo">
+      🧪 <b>Modo demo:</b> las predicciones se guardan solo en este dispositivo.
+      Para que jueguen todos y se compartan los datos, falta conectar Firebase (ver README).
+    </div>
+
+    <nav class="tabs">
+      <button class="tab activa" data-vista="jugar">✍️ Jugar</button>
+      <button class="tab" data-vista="participantes">👨‍👩‍👧 Participantes</button>
+      <button class="tab" data-vista="tabla">🏆 Posiciones</button>
+    </nav>
+
+    <!-- ============ JUGAR ============ -->
+    <section class="vista activa" id="vista-jugar">
+      <div class="card">
+        <h2>Hacé tu predicción ✨</h2>
+        <p class="intro">Completá tus pronósticos sobre la llegada de Sofía. ¡El que más se acerque gana!</p>
+        <form id="form-prediccion" autocomplete="off">
+          <label class="campo">
+            <span class="campo-label">🙋 Tu nombre</span>
+            <input type="text" id="nombre" name="nombre" maxlength="40" placeholder="Ej: Tía Caro" required />
+          </label>
+          <div class="grid-campos" id="campos"></div>
+          <button type="submit" class="btn" id="btn-enviar">¡Enviar mi predicción! 🎉</button>
+        </form>
+      </div>
+      <div class="footer">
+        <button class="btn btn-sec" id="btn-compartir">🔗 Compartir el juego</button>
+      </div>
+    </section>
+
+    <!-- ============ PARTICIPANTES ============ -->
+    <section class="vista" id="vista-participantes">
+      <div class="subhead">
+        <h2>Participantes</h2>
+        <span class="contador-pill"><b id="contador-part">0</b> jugando 🎈</span>
+      </div>
+      <div id="lista-participantes"></div>
+    </section>
+
+    <!-- ============ TABLA ============ -->
+    <section class="vista" id="vista-tabla">
+      <div class="subhead"><h2>Tabla de posiciones 🏆</h2></div>
+      <div id="resultado-real"></div>
+      <div id="tabla"></div>
+    </section>
+
+    <footer class="creditos">
+      Hecho con 💗 para Sofía · <a href="admin.html">admin</a>
+    </footer>
+  </div>
+
+  <div class="toast" id="enviado">¡Tu predicción quedó guardada! 🎉</div>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
