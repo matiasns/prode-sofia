@@ -1,6 +1,6 @@
 // Panel de administración: cargar los datos reales cuando nazca el bebé.
-import { BEBE, CAMPOS, ADMIN_PASSWORD } from "./config.js";
-import { MODO, escucharResultado, escucharPredicciones, guardarResultado } from "./db.js";
+import { BEBE, CAMPOS, ADMIN_PASSWORD } from "./config.js?v=4";
+import { MODO, escucharResultado, escucharPredicciones, guardarResultado } from "./db.js?v=4";
 
 const $ = (s) => document.querySelector(s);
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));

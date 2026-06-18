@@ -1,7 +1,7 @@
 // Lógica de la página principal (jugar, participantes, tabla).
-import { BEBE, CAMPOS } from "./config.js";
-import { MODO, agregarPrediccion, escucharPredicciones, escucharResultado } from "./db.js";
-import { tablaDePosiciones, puntajeMaximo } from "./scoring.js";
+import { BEBE, CAMPOS } from "./config.js?v=4";
+import { MODO, agregarPrediccion, escucharPredicciones, escucharResultado } from "./db.js?v=4";
+import { tablaDePosiciones, puntajeMaximo } from "./scoring.js?v=4";
 import confetti from "https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/+esm";
 
 // --- estado ---
@@ -42,17 +42,10 @@ function pintarTextos() {
 
 function pintarCuentaRegresiva() {
   const el = $("#countdown");
-  if (!BEBE.fechaEstimada) { el.style.display = "none"; return; }
-  const [a, m, d] = BEBE.fechaEstimada.split("-").map(Number);
-  const dias = Math.ceil((Date.UTC(a, m - 1, d) - Date.now()) / 86400000);
   if (resultado?.publicado) {
     el.innerHTML = `🎉 <strong>¡${esc(BEBE.nombre)} ya nació!</strong> Mirá la tabla de posiciones 👇`;
-  } else if (dias > 1) {
-    el.innerHTML = `⏳ Faltan aprox. <strong>${dias} días</strong> para conocer a ${esc(BEBE.nombre)}`;
-  } else if (dias >= 0) {
-    el.innerHTML = `⏳ <strong>¡Ya falta poquito!</strong> ${esc(BEBE.nombre)} está por llegar`;
   } else {
-    el.innerHTML = `👶 ${esc(BEBE.nombre)} está por llegar en cualquier momento…`;
+    el.innerHTML = `⏳ <strong>¡Falta poco para conocer a ${esc(BEBE.nombre)}!</strong> 💕`;
   }
 }
 

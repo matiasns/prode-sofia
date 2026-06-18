@@ -1,5 +1,5 @@
 // Lógica de puntajes: compara cada predicción con el resultado real.
-import { PUNTAJE } from "./config.js";
+import { PUNTAJE } from "./config.js?v=4";
 
 function aDias(str) {
   // "AAAA-MM-DD" -> número de días (en UTC)
