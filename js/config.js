@@ -8,18 +8,18 @@
 //    "modo demo" (guarda en tu navegador, no se comparte).
 //
 export const FIREBASE_CONFIG = {
-  apiKey: "TU_API_KEY",
-  authDomain: "TU_PROYECTO.firebaseapp.com",
-  projectId: "TU_PROYECTO",
-  storageBucket: "TU_PROYECTO.appspot.com",
-  messagingSenderId: "TU_SENDER_ID",
-  appId: "TU_APP_ID",
+  apiKey: "AIzaSyDwuo9oHuVprr96h1Hu0OmWmz1O5a49PHw",
+  authDomain: "prode-sofia.firebaseapp.com",
+  projectId: "prode-sofia",
+  storageBucket: "prode-sofia.firebasestorage.app",
+  messagingSenderId: "863029783230",
+  appId: "1:863029783230:web:7da5db33493c38cfcf8cef",
 };
 
 // 2) Clave para entrar al panel de admin (admin.html) y cargar
 //    los datos reales cuando nazca Sofía. ¡Cambiala!
 //    (Ojo: es una protección básica. Ver nota de seguridad en el README.)
-export const ADMIN_PASSWORD = "sofia2026";
+export const ADMIN_PASSWORD = "1Sofia2";
 
 // 3) Datos de la bebé (podés personalizar los textos).
 export const BEBE = {
