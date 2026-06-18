@@ -33,7 +33,27 @@ body {
   line-height: 1.5;
 }
 
-.wrap { max-width: 760px; margin: 0 auto; padding: 22px 18px 60px; }
+.wrap { max-width: 760px; margin: 0 auto; padding: 22px 18px 60px; position: relative; }
+
+/* ---------- Botón de idioma ---------- */
+.btn-idioma {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  background: var(--blanco);
+  color: var(--rosa);
+  border: 2px solid var(--rosa-suave);
+  border-radius: 999px;
+  font-family: "Baloo 2", cursive;
+  font-weight: 700;
+  font-size: 13px;
+  padding: 6px 12px;
+  cursor: pointer;
+  box-shadow: var(--sombra-suave);
+  z-index: 10;
+  transition: transform .15s, box-shadow .15s;
+}
+.btn-idioma:hover { transform: translateY(-1px); box-shadow: var(--sombra); }
 
 /* ---------- Encabezado ---------- */
 header { text-align: center; padding: 14px 0 6px; }

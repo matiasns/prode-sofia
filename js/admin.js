@@ -1,6 +1,6 @@
 // Panel de administración: cargar los datos reales cuando nazca el bebé.
-import { BEBE, CAMPOS, ADMIN_PASSWORD } from "./config.js?v=4";
-import { MODO, escucharResultado, escucharPredicciones, guardarResultado } from "./db.js?v=4";
+import { BEBE, CAMPOS, ADMIN_PASSWORD } from "./config.js?v=5";
+import { MODO, escucharResultado, escucharPredicciones, guardarResultado } from "./db.js?v=5";
 
 const $ = (s) => document.querySelector(s);
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -30,7 +30,7 @@ function pintarFormulario() {
     if (c.tipo === "select") {
       input = `<select name="${c.key}">
         <option value="">— sin dato —</option>
-        ${c.opciones.map((o) => `<option value="${esc(o)}">${esc(o)}</option>`).join("")}
+        ${c.opciones.map((o) => `<option value="${esc(o.v)}">${esc(o.v)}</option>`).join("")}
       </select>`;
     } else {
       const extra = [

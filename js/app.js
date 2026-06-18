@@ -1,12 +1,14 @@
 // Lógica de la página principal (jugar, participantes, tabla).
-import { BEBE, CAMPOS } from "./config.js?v=4";
-import { MODO, agregarPrediccion, escucharPredicciones, escucharResultado } from "./db.js?v=4";
-import { tablaDePosiciones, puntajeMaximo } from "./scoring.js?v=4";
+import { BEBE, CAMPOS, TEXTOS } from "./config.js?v=5";
+import { MODO, agregarPrediccion, escucharPredicciones, escucharResultado } from "./db.js?v=5";
+import { tablaDePosiciones, puntajeMaximo } from "./scoring.js?v=5";
 import confetti from "https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/+esm";
 
 // --- estado ---
 let predicciones = [];
 let resultado = null;
+let LANG = localStorage.getItem("prode_lang") ||
+  (navigator.language?.toLowerCase().startsWith("en") ? "en" : "es");
 const yo = {
   nombre: localStorage.getItem("prode_mi_nombre") || "",
 };
@@ -19,6 +21,19 @@ const esc = (s) =>
   );
 const campo = (k) => CAMPOS.find((c) => c.key === k);
 
+// --- idioma ---
+function t(key) {
+  const tabla = TEXTOS[LANG] || TEXTOS.es;
+  return tabla[key] ?? TEXTOS.es[key] ?? key;
+}
+const labelCampo = (c) => (LANG === "en" && c.label_en) ? c.label_en : c.label;
+const phCampo = (c) => (LANG === "en" && c.placeholder_en) ? c.placeholder_en : (c.placeholder || "");
+function etiquetaOpcion(c, value) {
+  const o = c?.opciones?.find((op) => op.v === value);
+  if (!o) return value;
+  return (LANG === "en" && o.en) ? o.en : o.v;
+}
+
 function fmtValor(key, v) {
   if (v == null || v === "") return "—";
   if (key === "peso") return `${v} g`;
@@ -27,6 +42,8 @@ function fmtValor(key, v) {
     const [a, m, d] = String(v).split("-");
     return `${d}/${m}/${a}`;
   }
+  const c = campo(key);
+  if (c?.tipo === "select") return etiquetaOpcion(c, v);
   return v;
 }
 
@@ -36,16 +53,18 @@ function fmtValor(key, v) {
 function pintarTextos() {
   document.title = BEBE.titulo;
   $("#titulo").textContent = BEBE.titulo;
-  $("#subtitulo").textContent = BEBE.subtitulo;
+  $("#subtitulo").textContent =
+    (LANG === "en" && BEBE.subtitulo_en) ? BEBE.subtitulo_en : BEBE.subtitulo;
   pintarCuentaRegresiva();
 }
 
 function pintarCuentaRegresiva() {
   const el = $("#countdown");
+  const n = esc(BEBE.nombre);
   if (resultado?.publicado) {
-    el.innerHTML = `🎉 <strong>¡${esc(BEBE.nombre)} ya nació!</strong> Mirá la tabla de posiciones 👇`;
+    el.innerHTML = t("countdown_nacio").replace("{n}", n);
   } else {
-    el.innerHTML = `⏳ <strong>¡Falta poco para conocer a ${esc(BEBE.nombre)}!</strong> 💕`;
+    el.innerHTML = t("countdown_falta").replace("{n}", n);
   }
 }
 
@@ -59,22 +78,22 @@ function pintarFormulario() {
     const req = c.opcional ? "" : "required";
     if (c.tipo === "select") {
       input = `<select name="${c.key}" ${req}>
-        <option value="" disabled selected>Elegí una opción…</option>
-        ${c.opciones.map((o) => `<option value="${esc(o)}">${esc(o)}</option>`).join("")}
+        <option value="" disabled selected>${esc(t("select_default"))}</option>
+        ${c.opciones.map((o) => `<option value="${esc(o.v)}">${esc((LANG === "en" && o.en) ? o.en : o.v)}</option>`).join("")}
       </select>`;
     } else if (c.tipo === "textarea") {
-      input = `<textarea name="${c.key}" rows="2" placeholder="${esc(c.placeholder || "")}" ${req}></textarea>`;
+      input = `<textarea name="${c.key}" rows="2" placeholder="${esc(phCampo(c))}" ${req}></textarea>`;
     } else {
       const extra = [
         c.min != null ? `min="${c.min}"` : "",
         c.max != null ? `max="${c.max}"` : "",
         c.step != null ? `step="${c.step}"` : "",
-        c.placeholder ? `placeholder="${esc(c.placeholder)}"` : "",
+        phCampo(c) ? `placeholder="${esc(phCampo(c))}"` : "",
       ].join(" ");
       input = `<input type="${c.tipo}" name="${c.key}" ${extra} ${req}>`;
     }
     return `<label class="campo">
-      <span class="campo-label">${c.emoji} ${esc(c.label)}${c.opcional ? ' <em>(opcional)</em>' : ""}</span>
+      <span class="campo-label">${c.emoji} ${esc(labelCampo(c))}${c.opcional ? ` <em>${esc(t("opcional"))}</em>` : ""}</span>
       ${input}
     </label>`;
   }).join("");
@@ -88,7 +107,7 @@ function nuevoCaptcha() {
   const a = 1 + Math.floor(Math.random() * 9);
   const b = 1 + Math.floor(Math.random() * 9);
   captchaResultado = a + b;
-  $("#captcha-pregunta").textContent = `¿Cuánto es ${a} + ${b}?`;
+  $("#captcha-pregunta").textContent = t("captcha_pregunta").replace("{a}", a).replace("{b}", b);
   const inp = $("#captcha-respuesta");
   if (inp) inp.value = "";
 }
@@ -102,16 +121,17 @@ async function enviarPrediccion(e) {
 
   // Chequeo anti-robot
   if (parseInt($("#captcha-respuesta").value, 10) !== captchaResultado) {
-    alert("La verificación no coincide 🤔\n¡Resolvé la sumita y probá de nuevo!");
+    alert(t("captcha_error"));
     nuevoCaptcha();
     return;
   }
+
   for (const c of CAMPOS) {
     datos[c.key] = form.elements[c.key]?.value ?? "";
   }
 
   btn.disabled = true;
-  btn.textContent = "Guardando…";
+  btn.textContent = t("btn_guardando");
   try {
     await agregarPrediccion(datos);
     yo.nombre = datos.nombre;
@@ -124,10 +144,10 @@ async function enviarPrediccion(e) {
     $("#enviado").classList.add("visible");
     setTimeout(() => $("#enviado").classList.remove("visible"), 4000);
   } catch (err) {
-    alert("Ups, no se pudo guardar 😞\n\n" + err.message);
+    alert(t("error_guardar") + err.message);
   } finally {
     btn.disabled = false;
-    btn.textContent = "¡Enviar mi predicción! 🎉";
+    btn.textContent = t("btn_enviar");
   }
 }
 
@@ -147,7 +167,7 @@ function pintarParticipantes() {
   const cont = $("#lista-participantes");
   $("#contador-part").textContent = predicciones.length;
   if (!predicciones.length) {
-    cont.innerHTML = `<p class="vacio">Todavía nadie jugó. ¡Sé el primero! 🥳</p>`;
+    cont.innerHTML = `<p class="vacio">${esc(t("participantes_vacio"))}</p>`;
     return;
   }
   cont.innerHTML = predicciones
@@ -160,7 +180,7 @@ function pintarParticipantes() {
         ? `<p class="mensaje">💌 “${esc(p.mensaje)}”</p>`
         : "";
       return `<article class="card-part ${mio ? "mio" : ""}">
-        <h3>${esc(p.nombre)} ${mio ? '<span class="vos">vos</span>' : ""}</h3>
+        <h3>${esc(p.nombre)} ${mio ? `<span class="vos">${esc(t("vos"))}</span>` : ""}</h3>
         <div class="chips">${chips}</div>
         ${msg}
       </article>`;
@@ -174,20 +194,21 @@ function pintarParticipantes() {
 function pintarTabla() {
   const cont = $("#tabla");
   const banner = $("#resultado-real");
+  const n = esc(BEBE.nombre);
 
   if (!resultado?.publicado) {
     banner.style.display = "none";
     cont.innerHTML = `<div class="vacio grande">
       <div class="emoji-grande">🤍</div>
-      <h3>${esc(BEBE.nombre)} todavía no llegó</h3>
-      <p>En cuanto nazca y se carguen los datos reales, acá va a aparecer la tabla de posiciones con los ganadores.<br>Mientras tanto… ¡sumá tu predicción! 👶</p>
+      <h3>${t("tabla_vacia_titulo").replace("{n}", n)}</h3>
+      <p>${t("tabla_vacia_texto")}</p>
     </div>`;
     return;
   }
 
   // Banner con los datos reales
   banner.style.display = "block";
-  banner.innerHTML = `<h3>🎀 ¡Así llegó ${esc(BEBE.nombre)}!</h3>
+  banner.innerHTML = `<h3>${t("banner_titulo").replace("{n}", n)}</h3>
     <div class="chips">${CAMPOS.filter((c) => !c.sinPuntaje)
       .map((c) => `<span class="chip real"><b>${c.emoji}</b> ${esc(fmtValor(c.key, resultado[c.key]))}</span>`)
       .join("")}</div>`;
@@ -195,7 +216,7 @@ function pintarTabla() {
   const tabla = tablaDePosiciones(predicciones, resultado);
   const max = puntajeMaximo();
   if (!tabla.length) {
-    cont.innerHTML = `<p class="vacio">No hubo predicciones cargadas 🙈</p>`;
+    cont.innerHTML = `<p class="vacio">${esc(t("tabla_sin_pred"))}</p>`;
     return;
   }
 
@@ -209,17 +230,18 @@ function pintarTabla() {
           const d = p.detalle[c.key] || { pts: 0, exacto: false };
           const icon = d.exacto ? "✅" : d.pts > 0 ? "🟡" : "⚪";
           return `<div class="det-row">
-            <span>${c.emoji} ${esc(c.label)}</span>
+            <span>${c.emoji} ${esc(labelCampo(c))}</span>
             <span class="det-val">${esc(fmtValor(c.key, p[c.key]))} ${icon}</span>
             <span class="det-pts">+${d.pts}</span>
           </div>`;
         })
         .join("");
+      const ex = esc(p.exactos === 1 ? t("badge_exacto_one") : t("badge_exacto_many"));
       return `<details class="fila ${mio ? "mio" : ""} ${i < 3 ? "podio" : ""}">
         <summary>
           <span class="pos">${pos}</span>
-          <span class="nombre">${esc(p.nombre)} ${mio ? '<span class="vos">vos</span>' : ""}
-            ${p.exactos ? `<span class="badge">${p.exactos} exacto${p.exactos > 1 ? "s" : ""} 🎯</span>` : ""}
+          <span class="nombre">${esc(p.nombre)} ${mio ? `<span class="vos">${esc(t("vos"))}</span>` : ""}
+            ${p.exactos ? `<span class="badge">${p.exactos} ${ex} 🎯</span>` : ""}
           </span>
           <span class="puntos">${p.total}<small>/${max}</small></span>
         </summary>
@@ -234,7 +256,7 @@ function pintarTabla() {
 // ===============================================================
 function mostrarVista(nombre) {
   document.querySelectorAll(".vista").forEach((v) => v.classList.remove("activa"));
-  document.querySelectorAll(".tab").forEach((t) => t.classList.remove("activa"));
+  document.querySelectorAll(".tab").forEach((tb) => tb.classList.remove("activa"));
   $(`#vista-${nombre}`)?.classList.add("activa");
   document.querySelector(`.tab[data-vista="${nombre}"]`)?.classList.add("activa");
   window.scrollTo({ top: 0, behavior: "smooth" });
@@ -243,33 +265,53 @@ function mostrarVista(nombre) {
 function compartir() {
   const url = location.href.split("#")[0].replace("admin.html", "");
   if (navigator.share) {
-    navigator.share({ title: BEBE.titulo, text: BEBE.subtitulo, url }).catch(() => {});
+    navigator.share({ title: BEBE.titulo, text: $("#subtitulo").textContent, url }).catch(() => {});
   } else {
     navigator.clipboard.writeText(url);
     const b = $("#btn-compartir");
-    const t = b.textContent;
-    b.textContent = "¡Link copiado! ✅";
-    setTimeout(() => (b.textContent = t), 2000);
+    const prev = b.textContent;
+    b.textContent = t("compartir_copiado");
+    setTimeout(() => (b.textContent = prev), 2000);
   }
+}
+
+// ===============================================================
+//  Idioma (botón ES / EN)
+// ===============================================================
+function aplicarIdioma() {
+  document.documentElement.lang = LANG;
+  document.querySelectorAll("[data-i18n]").forEach((el) => { el.textContent = t(el.dataset.i18n); });
+  document.querySelectorAll("[data-i18n-html]").forEach((el) => { el.innerHTML = t(el.dataset.i18nHtml); });
+  document.querySelectorAll("[data-i18n-ph]").forEach((el) => { el.placeholder = t(el.dataset.i18nPh); });
+  const btn = $("#btn-idioma");
+  if (btn) btn.textContent = LANG === "es" ? "🌐 EN" : "🌐 ES";
+  pintarTextos();
+  pintarFormulario();
+  nuevoCaptcha();
+  pintarParticipantes();
+  pintarTabla();
+}
+
+function cambiarIdioma() {
+  LANG = LANG === "es" ? "en" : "es";
+  localStorage.setItem("prode_lang", LANG);
+  aplicarIdioma();
 }
 
 // ===============================================================
 //  Inicio
 // ===============================================================
 function init() {
-  pintarTextos();
-  pintarFormulario();
-  nuevoCaptcha();
-  pintarParticipantes();
-  pintarTabla();
-
   if (MODO === "demo") $("#aviso-demo").style.display = "block";
 
   $("#form-prediccion").addEventListener("submit", enviarPrediccion);
   $("#btn-compartir").addEventListener("click", compartir);
-  document.querySelectorAll(".tab").forEach((t) =>
-    t.addEventListener("click", () => mostrarVista(t.dataset.vista))
+  $("#btn-idioma").addEventListener("click", cambiarIdioma);
+  document.querySelectorAll(".tab").forEach((tabEl) =>
+    tabEl.addEventListener("click", () => mostrarVista(tabEl.dataset.vista))
   );
+
+  aplicarIdioma();
 
   escucharPredicciones((lista) => {
     predicciones = lista;

@@ -1,6 +1,6 @@
 // Capa de datos. Usa Firebase si está configurado; si no, "modo demo"
 // que guarda en el navegador (localStorage) para poder probar la web.
-import { FIREBASE_CONFIG } from "./config.js?v=4";
+import { FIREBASE_CONFIG } from "./config.js?v=5";
 
 const SIN_CONFIGURAR =
   !FIREBASE_CONFIG?.apiKey || String(FIREBASE_CONFIG.apiKey).includes("TU_API_KEY");
